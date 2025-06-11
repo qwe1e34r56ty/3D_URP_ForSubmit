@@ -4,12 +4,12 @@ public class PlayerFactory
 {
     public Player BuildPlayer(GameContext gameContext, PlayerData playerData)
     {
-        GameObject playerRoot = GameObject.Instantiate(playerData.playerPrefab);
-        if(playerData.playerPrefab != null)
+        GameObject playerRoot = GameObject.Instantiate(playerData.prefab);
+        if(playerData.prefab != null)
         {
             if (playerRoot.TryGetComponent<Player>(out Player player))
             {
-                player.initialize(gameContext, playerData);
+                player.Initialize(gameContext, playerData);
                 return player;
             }
             return null;

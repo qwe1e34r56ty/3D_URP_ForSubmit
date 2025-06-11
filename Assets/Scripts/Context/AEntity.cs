@@ -1,23 +1,19 @@
-﻿using System.Collections;
-using Unity.VisualScripting;
+﻿using UnityEngine.AI;
 using UnityEngine;
-using UnityEngine.AI;
+using Unity.VisualScripting;
+using System.Collections;
 
-public class Player : MonoBehaviour
+public abstract class AEntity : MonoBehaviour
 {
-    public EnemyDetector enemyDetector;
     public GameContext gameContext;
-    public NavMeshAgent nav;
-    public PlayerData playerData;
+    public NavMeshAgent nav { get; private set; }
     public Vector3 lastDest;
+    public bool isDie = false;
     [field: SerializeField] public PlayerAnimationData animationData { get; private set; }
     public Animator animator { get; private set; }
     public CharacterController controller { get; private set; }
-    private PlayerStateMachine stateMachine;
-    public System.Action onClearCallback;
-    public System.Action onFailCallback;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         animationData = new PlayerAnimationData();
         animationData.Initialize();
@@ -25,22 +21,7 @@ public class Player : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-    private void Start()
-    {
-    }
-
-    private void Update()
-    {
-        stateMachine?.Update();
-    }
-
-    public void initialize(GameContext gameContext, PlayerData playerData)
-    {
-        this.gameContext = gameContext;
-        this.playerData = playerData;
-        stateMachine = new PlayerStateMachine(this);
-        stateMachine.ChangeState(stateMachine.playerIdleState);
-    }
+    public abstract void Initialize(GameContext gameContext, AEntityData entityData);
 
     public void SetNavAgent()
     {
@@ -61,7 +42,7 @@ public class Player : MonoBehaviour
         StartCoroutine(WaitForNavMeshAndSetDestination(dest));
     }
 
-    private IEnumerator WaitForNavMeshAndSetDestination(Vector3 destination)
+    protected IEnumerator WaitForNavMeshAndSetDestination(Vector3 destination)
     {
         while (!nav.isOnNavMesh || !nav.isActiveAndEnabled)
         {
@@ -74,15 +55,5 @@ public class Player : MonoBehaviour
     public void Teleport(Vector3 dest)
     {
         transform.position = dest;
-    }
-
-    public void SetClearHandler(System.Action callback)
-    {
-        onClearCallback = callback;
-    }
-
-    public void SetFailHandler(System.Action callback)
-    {
-        onFailCallback = callback;
     }
 }

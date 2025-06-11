@@ -2,7 +2,7 @@
 
 public class EnemyWalkState : EnemyBaseState
 {
-    public EnemyWalkState(EnemyStateMachine enemyStateMachine) : base(enemyStateMachine)
+    public EnemyWalkState(GameContext gameContext, EnemyStateMachine enemyStateMachine) : base(gameContext, enemyStateMachine)
     {
 
     }
@@ -15,7 +15,7 @@ public class EnemyWalkState : EnemyBaseState
             return;
         }
         enemy.nav.enabled = true;
-        enemy.SetDestination();
+        enemy.SetDestination(gameContext.player.transform.position);
     }
 
     public override void Exit()
@@ -38,7 +38,7 @@ public class EnemyWalkState : EnemyBaseState
         }
         else
         {
-            enemy.SetDestination();
+            enemy.SetDestination(gameContext.player.transform.position);
         }
         if (Time.timeScale == 0f)
         {

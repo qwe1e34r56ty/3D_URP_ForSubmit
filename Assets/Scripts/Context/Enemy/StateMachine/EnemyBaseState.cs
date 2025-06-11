@@ -4,8 +4,10 @@ public class EnemyBaseState : IState
 {
     public EnemyStateMachine enemyStateMachine {  get; private set; }
     public Enemy enemy;
-    public EnemyBaseState(EnemyStateMachine stateMachine)
+    protected GameContext gameContext;
+    public EnemyBaseState(GameContext gameContext, EnemyStateMachine stateMachine)
     {
+        this.gameContext = gameContext;
         this.enemyStateMachine = stateMachine;
         this.enemy = stateMachine.enemy;
     }

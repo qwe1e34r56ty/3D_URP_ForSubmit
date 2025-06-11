@@ -10,11 +10,11 @@ public class EnemyStateMachine : StateMachine
     public IState enemyIdleState { get; set; }
     public IState enemyWalkState { get; set; }
 
-    public EnemyStateMachine(Enemy enemy)
+    public EnemyStateMachine(GameContext gameContext, Enemy enemy)
     {
         this.enemy = enemy;
 
-        enemyIdleState = new EnemyIdleState(this);
-        enemyWalkState = new EnemyWalkState(this);
+        enemyIdleState = new EnemyIdleState(gameContext, this);
+        enemyWalkState = new EnemyWalkState(gameContext, this);
     }
 }

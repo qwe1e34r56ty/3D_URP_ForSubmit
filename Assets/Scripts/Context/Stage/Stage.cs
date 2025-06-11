@@ -5,24 +5,24 @@ using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
-    GameContext gameContext;
-    StageData stageData;
+    private StageData stageData;
+    private GameObject endObject;
+    private HashSet<Vector2Int> floorPositions;
+    private NavMeshSurface surface;
+    private MST mst;
+
     public List<Room> rooms;
-    GameObject endObject;
-    HashSet<Vector2Int> floorPositions;
-    NavMeshSurface surface;
     public Vector2Int start { get; private set; }
     public Vector2Int dest { get; private set; }
-    MST mst;
 
     public void initialize(GameContext gameContext, StageData stageData)
     {
         this.stageData = stageData;
-        rooms = Room.GenerateRooms(stageData);
+        rooms = GenerateRooms(stageData);
         mst = new MST(rooms);
         floorPositions = new HashSet<Vector2Int>();
-        start = rooms[0].Center;
-        dest = rooms[rooms.Count - 1].Center;
+        start = rooms[0].center;
+        dest = rooms[rooms.Count - 1].center;
         endObject = Instantiate(stageData.EndPrefab, new Vector3(dest.x, stageData.EndPrefab.transform.localScale.y / 2, dest.y), Quaternion.identity, transform);
 
         ApplyRoomsToFloorSet();
@@ -38,7 +38,7 @@ public class Stage : MonoBehaviour
         {
             foreach (var room in rooms)
             {
-                Vector2Int pos = room.Center;
+                Vector2Int pos = room.center;
 
                 Enemy enemy = gameContext.enemyFactory.BuildEnemy(gameContext, stageData.enemyData);
                 enemy.Teleport(new Vector3(pos.x, 0, pos.y));
@@ -46,12 +46,30 @@ public class Stage : MonoBehaviour
 
                 gameContext.enemies.Add(enemy);
             }
-
         }
     }
 
+    private List<Room> GenerateRooms(StageData stageData)
+    {
+        List<Room> rooms = new List<Room>();
+        int attempts = stageData.rooms * 10;
+        while (rooms.Count < stageData.rooms && attempts-- > 0)
+        {
+            int w = stageData.roomWidth;
+            int h = stageData.roomHeight;
+            int x = Random.Range(0, stageData.rooms * stageData.roomWidth * 3 / 4);
+            int y = Random.Range(0, stageData.rooms * stageData.roomHeight * 3 / 4);
+            RectInt rect = new(x, y, w, h);
 
-    void ApplyRoomsToFloorSet()
+            if (!rooms.Any(r => r.rect.Overlaps(rect)))
+            {
+                rooms.Add(new Room(rect));
+            }
+        }
+        return rooms;
+    }
+
+    private void ApplyRoomsToFloorSet()
     {
         foreach (Room room in rooms)
         {
@@ -65,33 +83,33 @@ public class Stage : MonoBehaviour
         }
     }
 
-    void ApplyCorridorsToFloorSet()
+    private void ApplyCorridorsToFloorSet()
     {
         foreach (var edge in mst.edges)
         {
-            Vector2Int roomACenter = edge.roomA.Center;
-            Vector2Int roomBCenter = edge.roomB.Center;
+            Vector2Int roomAcenter = edge.roomA.center;
+            Vector2Int roomBcenter = edge.roomB.center;
             int corridorWidth = 1;
 
-            for (int x = Mathf.Min(roomACenter.x, roomBCenter.x); x <= Mathf.Max(roomACenter.x, roomBCenter.x); x++)
+            for (int x = Mathf.Min(roomAcenter.x, roomBcenter.x); x <= Mathf.Max(roomAcenter.x, roomBcenter.x); x++)
             {
                 for (int w = -corridorWidth; w <= corridorWidth; w++)
                 {
-                    floorPositions.Add(new Vector2Int(x, roomACenter.y + w));
+                    floorPositions.Add(new Vector2Int(x, roomAcenter.y + w));
                 }
             }
 
-            for (int y = Mathf.Min(roomACenter.y, roomBCenter.y); y <= Mathf.Max(roomACenter.y, roomBCenter.y); y++)
+            for (int y = Mathf.Min(roomAcenter.y, roomBcenter.y); y <= Mathf.Max(roomAcenter.y, roomBcenter.y); y++)
             {
                 for (int w = -corridorWidth; w <= corridorWidth; w++)
                 {
-                    floorPositions.Add(new Vector2Int(roomBCenter.x + w, y));
+                    floorPositions.Add(new Vector2Int(roomBcenter.x + w, y));
                 }
             }
         }
     }
 
-    void InstantiateTiles()
+    private void InstantiateTiles()
     {
         foreach (Vector2Int pos in floorPositions)
         {

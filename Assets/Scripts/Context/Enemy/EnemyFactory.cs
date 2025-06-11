@@ -4,11 +4,11 @@ public class EnemyFactory
 {
     public Enemy BuildEnemy(GameContext gameContext, EnemyData enemyData)
     {
-        GameObject enemyRoot = GameObject.Instantiate(enemyData.enemyPrefab);
-        if (enemyData.enemyPrefab != null)
+        GameObject enemyRoot = GameObject.Instantiate(enemyData.prefab);
+        if (enemyData.prefab != null)
         {
             Enemy enemy = enemyRoot.AddComponent<Enemy>();
-            enemy.initialize(gameContext, enemyData);
+            enemy.Initialize(gameContext, enemyData);
             return enemy;
         }
         return null;

@@ -9,6 +9,6 @@ class Edge
     {
         this.roomA = roomA;
         this.roomB = roomB;
-        distance = Vector2Int.Distance(roomA.Center, roomB.Center);
+        distance = Vector2Int.Distance(roomA.center, roomB.center);
     }
 }

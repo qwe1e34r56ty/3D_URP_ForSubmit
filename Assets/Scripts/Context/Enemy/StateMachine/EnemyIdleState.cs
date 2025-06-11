@@ -2,7 +2,7 @@
 
 public class EnemyIdleState : EnemyBaseState
 {
-    public EnemyIdleState(EnemyStateMachine enemyStateMachine) : base(enemyStateMachine)
+    public EnemyIdleState(GameContext gameContext, EnemyStateMachine enemyStateMachine) : base(gameContext, enemyStateMachine)
     {
 
     }
