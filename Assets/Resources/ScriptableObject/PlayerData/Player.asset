@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf8b220dcf151144b9f60984dd85c46a, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 916639812453841400, guid: 1f77d70c3974c5e4e82ddf362769bdb6,
-    type: 3}
-  gold: 20000
-  hp: 50
+  prefab: {fileID: 916639812453841400, guid: 1f77d70c3974c5e4e82ddf362769bdb6, type: 3}
+  hp: 70
   maxHp: 100
+  gold: 19800
   speed: 10
   inventory:
   - {fileID: 11400000, guid: 971005cbd2461114dbf76017f79c1533, type: 2}

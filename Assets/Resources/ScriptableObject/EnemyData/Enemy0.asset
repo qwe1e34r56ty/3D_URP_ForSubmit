@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba6523420d46f0e40b29ff758e4d799d, type: 3}
   m_Name: Enemy0
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 7266526104193891145, guid: a1f4c194230a49d44ba5e39963e1d4be,
-    type: 3}
+  prefab: {fileID: 7266526104193891145, guid: a1f4c194230a49d44ba5e39963e1d4be, type: 3}
   hp: 100
   maxHp: 100
