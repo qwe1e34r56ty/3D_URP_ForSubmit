@@ -25,9 +25,10 @@ public class InventoryUI : MonoBehaviour
             Time.timeScale = 1.0f;
         });
     }
-    // Start is called before the first frame update
+
     void Start()
     {
+
     }
 
     private void OnEnable()

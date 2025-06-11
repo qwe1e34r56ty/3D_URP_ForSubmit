@@ -21,15 +21,6 @@ public class UIManager : MonoBehaviour
 
     private BaseUI[] uiArr = new BaseUI[(int)UIState.Total];
 
-    private void Start()
-    {
-    }
-
-    private void Update()
-    {
-
-    }
-
     public void Initialize(GameContext gameContext)
     {
         this.gameContext = gameContext;

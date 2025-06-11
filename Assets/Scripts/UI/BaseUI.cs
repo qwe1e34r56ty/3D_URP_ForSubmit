@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class BaseUI : MonoBehaviour
 {
-    protected UIManager uiManager;
     protected GameContext gameContext;
+    protected UIManager uiManager;
 
     public virtual void Initialize(GameContext gameContext, UIManager uiManager)
     {

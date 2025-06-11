@@ -17,7 +17,6 @@ public class IngameUI : BaseUI
         return UIState.InGame;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         InventoryButton.onClick.AddListener(() =>
@@ -27,7 +26,6 @@ public class IngameUI : BaseUI
         });
     }
 
-    // Update is called once per frame
     void Update()
     {
         Player player = gameContext.player;

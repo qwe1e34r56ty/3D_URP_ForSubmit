@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,6 @@ public class StageSelectUI : BaseUI
         return UIState.StageSelect;
     }
 
-    // Start is called before the first frame update
     public override void Initialize(GameContext gameContext, UIManager uiManager)
     {
         base.Initialize(gameContext, uiManager);
@@ -26,7 +26,7 @@ public class StageSelectUI : BaseUI
             stageSelectButtons.Add(stageSelectButton, i);
             if (stageSelectButton.TryGetComponent<StageSelectButton>(out StageSelectButton _stageSelectButton))
             {
-                _stageSelectButton.Initialize(gameContext.stageDataList[i]);
+                _stageSelectButton.Initialize(gameContext, gameContext.stageDataList[i]);
             }
             int stageIndex = i;
             stageSelectButton.onClick.AddListener(() =>
@@ -35,17 +35,6 @@ public class StageSelectUI : BaseUI
                 uiManager.OpenBaseUI(UIState.InGame);
             });
         }
-    }
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void EnterStage(int stageIndex)
@@ -57,6 +46,7 @@ public class StageSelectUI : BaseUI
         }
         Stage stage = gameContext.stageFactory.BuildStage(gameContext, gameContext.stageDataList[stageIndex]);
         gameContext.stage = stage;
+
         Player player;
         if (gameContext.player == null)
         {
@@ -73,6 +63,14 @@ public class StageSelectUI : BaseUI
 
         player.SetClearHandler(() =>
         {
+            ClearStage();
+        });
+        player.SetFailHandler(() =>
+        {
+            ClearStage();
+        });
+        void ClearStage()
+        {
             uiManager.OpenBaseUI(UIState.StageSelect);
             GameObject.Destroy(stage.gameObject);
             player.gameObject.SetActive(false);
@@ -84,17 +82,6 @@ public class StageSelectUI : BaseUI
                 }
             }
             gameContext.enemies.Clear();
-        });
-        player.SetFailHandler(() =>
-        {
-            uiManager.OpenBaseUI(UIState.StageSelect);
-            GameObject.Destroy(stage.gameObject);
-            player.gameObject.SetActive(false);
-            foreach (Enemy enemy in gameContext.enemies)
-            {
-                Destroy(enemy.gameObject);
-            }
-            gameContext.enemies.Clear();
-        });
+        }
     }
 }
